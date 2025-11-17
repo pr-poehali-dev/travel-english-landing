@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
@@ -14,6 +14,19 @@ const Index = () => {
     email: "",
     phone: ""
   });
+  const [spotsLeft, setSpotsLeft] = useState(12);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setSpotsLeft(prev => {
+        if (prev > 3) {
+          return Math.max(3, prev - 1);
+        }
+        return prev;
+      });
+    }, 180000);
+    return () => clearInterval(interval);
+  }, []);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -53,6 +66,10 @@ const Index = () => {
             Начать обучение
             <Icon name="ArrowRight" className="ml-2" size={20} />
           </Button>
+          <div className="mt-8 inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm px-6 py-3 rounded-full border border-white/20">
+            <Icon name="Users" className="text-white" size={20} />
+            <span className="text-lg font-semibold">Осталось всего <span className="text-accent">{spotsLeft} мест</span> в потоке</span>
+          </div>
         </div>
       </section>
 
